@@ -1,0 +1,31 @@
+<html>
+<head>
+	<title>Royaume Calculator</title>
+	<script src="//code.jquery.com/jquery-1.10.2.min.js" ></script>
+	<script src="model.js"></script>
+	<script src="view.js"></script>
+	<script src="controller.js"></script>
+	
+	
+	<script>
+		jQuery(document).ready(function($){
+//			window.app.view.render();	
+			window.app.model.init();	
+			window.app.model.addRoom(app.model.roomtypes.OFFICE, 12, app.model.floortypes.HARD);
+			console.log(window.app.model.getRoomByIndex(app.model.roomtypes.OFFICE, 0));
+			
+			console.log(window.app.model.getRooms());
+		});	
+	</script>
+</head>
+<body style="background-color: #062B36; color: #3EA180" >
+	<h1>Royaume Calculator</h1>
+
+
+
+	<div id="calculator">
+		<div id="init_screen">init</div>
+		<div id="second_screen">second screen</div>
+	</div>
+</body>
+</html>
