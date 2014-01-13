@@ -6,17 +6,20 @@
 	<script src="view.js"></script>
 	<script src="controller.js"></script>
 	
-	
 	<script>
 		jQuery(document).ready(function($){
-//			window.app.view.render();	
 			window.app.model.init();	
-			window.app.model.addRoom(app.model.roomtypes.OFFICE, 12, app.model.floortypes.HARD);
-			console.log(window.app.model.getRoomByIndex(app.model.roomtypes.OFFICE, 0));
+			window.app.model.addRoom(
+				app.model.roomtypes.OFFICE, 
+				12,
+			   	app.model.floortypes.HARD);
+			window.app.controller.render();
 			
-			console.log(window.app.model.getRooms());
+			window.app.controller.init();
+			window.app.controller.render();
 		});	
 	</script>
+
 </head>
 <body style="background-color: #062B36; color: #3EA180" >
 	<h1>Royaume Calculator</h1>
@@ -24,8 +27,8 @@
 
 
 	<div id="calculator">
-		<div id="init_screen">init</div>
-		<div id="second_screen">second screen</div>
+		<div id="roomselection_screen" class="appScreen" style="display:none;"></div>
+		<div id="second_screen" class="appScreen" style="display:none;">second screen</div>
 	</div>
 </body>
 </html>

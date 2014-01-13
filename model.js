@@ -17,7 +17,7 @@
 	app.model.floortypes.SOFT = 'Zacht';
 
 	var rooms = {};
-	var screenId = 'init';
+	var screenId = 'roomSelectionScreen';
 
     app.model.init = function(){
 		rooms[app.model.roomtypes.OFFICE]  = [];
@@ -55,7 +55,10 @@
 	app.model.getRooms = function(){
 		return rooms;
 	}	
-
+	
+	app.model.removeRoom = function(roomType, roomIndex){
+		rooms[roomType].splice(roomIndex, 1);
+	}
 	/**
 	 * Returns the room by a specified index
 	 */
