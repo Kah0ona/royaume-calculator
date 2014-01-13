@@ -40,12 +40,13 @@
 	 * Adds a room
 	 * @param roomType: one of app.model.roomtypes
 	 * @param m2: integer of square meters of the room
-	 * @param flootype: one of app.model.floortypes
+	 * @param floortype: one of app.model.floortypes
 	 */
-	app.model.addRoom = function(roomType, m2, floorType) {
+	app.model.addRoom = function(roomType, m2, floorType, numSpots) {
 		rooms[roomType].push({
 			"m2" : m2,
-			"floorType" : floorType
+			"floorType" : floorType,
+			"numSpots" : numSpots
 		});	
 	};	
 

@@ -31,13 +31,45 @@
 		var elt = $('#roomselection_screen');
 		elt.empty();
 		//manipulate DOM...
-		var table = getTableSelectionHTML(data.rooms);
-		elt.html(table);
+
+		var html = "<table class='calcform' border='1'>";
+	    html += getTableSelectionHTML(data.rooms);
+		html += getNewFormHTML(data.rooms);
+		html += "</table>";
+		elt.html(html);
 		showScreen('roomselection');
 	}
 
+	function getNewFormHTML(rooms){
+		var html = "";
+		html+= "<tr>";
+		html+= "<td><select name='roomtype'>";
+
+		for(var roomtype in rooms){
+			html+= "<option value='"+roomtype+"'>"+roomtype+"</option>";
+		}
+		html+= "</select></td>";
+		
+		html += "<td><input type='text' name='m2'></td>";
+		html += "<td><input type='text' name='numSpots'></td>";
+		html += "<td><select name='floortype'>";
+		html += '<option value="'+app.model.floortypes.HARD+'">';
+		html +=		app.model.floortypes.HARD;
+		html += "</option>";
+
+		html += '<option value="'+app.model.floortypes.SOFT+'">';
+		html +=		app.model.floortypes.SOFT;
+		html += "</option>";
+		html += "</select></td>";
+
+		html += "<td><a href='#' id='add-room'>+</a></td>";
+		html+="</tr>";	
+
+		return html;
+	}
+
 	function getTableSelectionHTML(rooms){
-		var html = "<table border='1'>";
+		var html = "";
 		for(var roomtype in rooms){
 			var rs = rooms[roomtype];
 			html += "<tr><th colspan='5'>"+roomtype+"</th></tr>";
@@ -47,8 +79,8 @@
 						    "<td>"+room.m2+"</td>"+
 							"<td>"+room.floorType+"</td>";
 
-				if(room.workPlaces != null){
-					html+= "<td>"+room.workPlaces+"</td>";
+				if(room.numSpots != null){
+					html+= "<td>"+room.numSpots+"</td>";
 				} else {
 				   	html += "<td>&nbsp;</td>";
 				}
