@@ -32,14 +32,28 @@
 		elt.empty();
 		//manipulate DOM...
 
-		var html = "<table class='calcform' border='1'>";
+		var html = "<table class='calcform table' >";
 	    html += getTableSelectionHTML(data.rooms);
+		html += getTableHeaderHTML();
 		html += getNewFormHTML(data.rooms);
+		html += getValidationErrorHTML();
 		html += "</table>";
 		elt.html(html);
 		showScreen('roomselection');
 	}
+	function getTableHeaderHTML(){
+		return "<tr><th>Type ruimte</th>"+
+			   "    <th>m<sup>2</sup></th>"+
+			   "    <th>Aantal werkplekken</th>"+
+			   "    <th>Vloer</th></tr>";
 
+	}
+	function getValidationErrorHTML(){
+		var html =  "<tr class='room-error' style='display:none;'>";
+		html +=       "<td colspan='5' class='error'></td>";
+		html +=     "</tr>";
+		return html;
+	}
 	function getNewFormHTML(rooms){
 		var html = "";
 		html+= "<tr>";
@@ -72,27 +86,31 @@
 		var html = "";
 		for(var roomtype in rooms){
 			var rs = rooms[roomtype];
-			html += "<tr><th colspan='5'>"+roomtype+"</th></tr>";
-			for(var i = 0; i < rs.length; i++){
-				var room = rs[i];
-				html += "<tr><td>"+roomtype+" "+(i+1)+"</td>"+
-						    "<td>"+room.m2+"</td>"+
-							"<td>"+room.floorType+"</td>";
+			if(rs.length > 0){
+				html += "<tr><th colspan='5'>"+roomtype+"</th></tr>";
+				html += getTableHeaderHTML();
+				for(var i = 0; i < rs.length; i++){
+					var room = rs[i];
+					html += "<tr><td>"+roomtype+" "+(i+1)+"</td>"+
+								"<td>"+room.m2+" m<sup>2</sup></td>";
 
-				if(room.numSpots != null){
-					html+= "<td>"+room.numSpots+"</td>";
-				} else {
-				   	html += "<td>&nbsp;</td>";
-				}
+					if(room.numSpots != null){
+						html+= "<td>"+room.numSpots+"</td>";
+					} else {
+						html += "<td>&nbsp;</td>";
+					}
 
-				html += "<td><a href='#' class='remove-room'"+
-							"data-room-id='"+i+"'"+
-							"data-room-type='"+roomtype+"'>"+
-							"&times;"+
-							"</a>"+
-							"</td>";
-				html += "</tr>";
-			}	
+					html += "<td>"+room.floorType+"</td>";
+					html += "<td><a href='#' class='remove-room'"+
+								"data-room-id='"+i+"'"+
+								"data-room-type='"+roomtype+"'>"+
+								"&times;"+
+								"</a>"+
+								"</td>";
+					html += "</tr>";
+
+				}	
+			}
 		}
 		return html;
 	}
