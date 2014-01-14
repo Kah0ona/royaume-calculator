@@ -34,17 +34,18 @@
 
 		var html = "<table class='calcform table' >";
 	    html += getTableSelectionHTML(data.rooms);
-		html += getTableHeaderHTML();
+		html += getTableHeaderHTML(true, "Aantal werkplekken");
 		html += getNewFormHTML(data.rooms);
 		html += getValidationErrorHTML();
 		html += "</table>";
 		elt.html(html);
 		showScreen('roomselection');
 	}
-	function getTableHeaderHTML(){
-		return "<tr><th>Type ruimte</th>"+
+	function getTableHeaderHTML(classs, num){
+		var x = classs == null ? "" : "class='numspots'";
+		return "<tr class='header-row'><th>Type ruimte</th>"+
 			   "    <th>m<sup>2</sup></th>"+
-			   "    <th>Aantal werkplekken</th>"+
+			   "    <th "+x+">"+num+"</th>"+
 			   "    <th>Vloer</th></tr>";
 
 	}
@@ -87,8 +88,17 @@
 		for(var roomtype in rooms){
 			var rs = rooms[roomtype];
 			if(rs.length > 0){
-				html += "<tr><th colspan='5'>"+roomtype+"</th></tr>";
-				html += getTableHeaderHTML();
+				html += "<tr><th colspan='5' class='group-row'>"
+								+roomtype+
+							"</th></tr>";
+				var str = '';
+				if(roomtype == app.model.roomtypes.STAIRS){
+					str = "Aantal"
+				} else if(roomtype == app.model.roomtypes.OFFICE){
+					str = "Aantal werkplekken";
+				} 
+				
+				html += getTableHeaderHTML(null, str);
 				for(var i = 0; i < rs.length; i++){
 					var room = rs[i];
 					html += "<tr><td>"+roomtype+" "+(i+1)+"</td>"+

@@ -8,18 +8,10 @@
 	<script src="model.js"></script>
 	<script src="view.js"></script>
 	<script src="controller.js"></script>
-	<style>
-		.calcform { margin: 25px; }
-	</style>
+	<link href="style.css" rel="stylesheet">
 	<script>
 		jQuery(document).ready(function($){
 			window.app.model.init();	
-			window.app.model.addRoom(
-				app.model.roomtypes.OFFICE, 
-				12,
-			   	app.model.floortypes.HARD, 
-				9);
-			window.app.controller.render();
 			
 			window.app.controller.init();
 			window.app.controller.render();

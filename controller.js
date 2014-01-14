@@ -34,10 +34,18 @@
 			var rid = $(this).attr('data-room-id');
 			var rtype = $(this).attr('data-room-type');
 			
-			app.model.removeRoom(rtype,rid);
+			app.model.removeroom(rtype,rid);
 			app.controller.render();
 		});
+		$('#calculator').on('change', 'select[name="roomtype"]', function(){
+			var roomtype = $('.calcform select[name="roomtype"]').val();
+			if(roomtype == app.model.roomtypes.STAIRS){
+				$('.numspots').html('Aantal');
+			} else {
+				$('.numspots').html('Aantal werkplekken');
+			}
 
+		});
 		$('#calculator').on('click', '#add-room', function(event){
 			event.preventDefault();
 			$('.room-error').hide();
@@ -48,14 +56,17 @@
 			var floorType = $('.calcform select[name="floortype"]').val();
 			var errors = [];
 
-			if(m2 != parseInt(m2)){
+			if(m2 != parseInt(m2) && 
+			   roomType != app.model.roomtypes.STAIRS){
 				errors.push('Vierkante meter: vul een geheel getal in.');	
 			}
 			
-			if(numSpots != parseInt(numSpots)){
+			if(numSpots != parseInt(numSpots) && 
+			   roomType != app.model.roomtypes.TOILET && 
+			   roomType != app.model.roomtypes.STAIRS){
 				errors.push('Aantal werkplekken: vul een geheel getal in.');
 			}
-console.log(errors);
+
 			
 			if(errors.length>0) {
 				var errMsg = "";
@@ -63,7 +74,6 @@ console.log(errors);
 					console.log(errors[i]);
 					errMsg += errors[i]+ "<br/>";
 				}
-				console.log(errMsg);
 				$('.room-error .error').html(errMsg);
 				$('.room-error').show();
 			} else {

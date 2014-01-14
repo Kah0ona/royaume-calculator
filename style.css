@@ -2,3 +2,14 @@
 	border: 1px solid white;
 
 }
+.calcform { width: 50%; }
+.header-row { padding-top: 20px; }
+.group-row { height: 50px; } 
+
+/* TODO
+- trap moet geen aantal werkplekken en m2 tonen
+- toilet moet geen aantal werkplekken tonen
+- rest moet alles tonen
+
+
+*/
