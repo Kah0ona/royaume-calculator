@@ -5,6 +5,13 @@
 .calcform { width: 50%; }
 .header-row { padding-top: 20px; }
 .group-row { height: 50px; } 
+.datetime.selected {
+	background-color: #ccc;
+}
+.datetime {
+	border: 2px solid #ccc;
+	padding: 5px;
+}
 
 /* TODO
 - trap moet geen aantal werkplekken en m2 tonen

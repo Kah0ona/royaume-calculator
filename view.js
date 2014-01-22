@@ -38,9 +38,70 @@
 		html += getNewFormHTML(data.rooms);
 		html += getValidationErrorHTML();
 		html += "</table>";
+		html += getNextPrevButton(null, 'to-agenda');
 		elt.html(html);
 		showScreen('roomselection');
 	}
+
+	function getNextPrevButton(prevId, nextId){
+		var ret = "<div class='nextprev'>";
+		if(prevId != null){
+			ret +=   "<a id='"+prevId+"'>Vorige</a>";
+		}
+		if(nextId != null){
+			ret +=   "<a id='"+nextId+"'>Volgende</a>";
+		}
+		ret +=    "</div>";
+		return ret;
+	}
+	app.view.renderPersonalDetailsScreen = function(person){
+		var elt = $('#personaldetails_screen');
+		elt.empty();
+
+		var html="";
+
+		elt.html(html);
+
+		showScreen('personaldetails');
+
+	}
+
+	app.view.renderAgendaScreen = function(agenda){
+		var elt = $('#agenda_screen');
+		elt.empty();
+		var html = "";
+
+		html += "<table class='agenda' >";
+	    for(var day in agenda){
+			html += "<tr>";
+			html += "<td>"+day+"</td>";
+			var selected = "";
+			if(app.model.isDateTimeSelected(day,app.model.times.PREOFFICE)){
+				selected = " selected";
+			}
+			html += "<td class='datetime "+selected+"' data-day='"+day+"' data-time='"+app.model.times.PREOFFICE+"'>"+app.model.times.PREOFFICE+"</td>";
+		
+			selected = "";
+			if(app.model.isDateTimeSelected(day,app.model.times.OFFICE)){
+				selected = " selected";
+			}
+			html += "<td class='datetime "+selected+"' data-day='"+day+"' data-time='"+app.model.times.OFFICE+"'>"+app.model.times.OFFICE+"</td>";
+
+			selected = "";
+			if(app.model.isDateTimeSelected(day,app.model.times.POSTOFFICE)){
+				selected = " selected";
+			}
+			html += "<td class='datetime "+selected+"' data-day='"+day+"' data-time='"+app.model.times.POSTOFFICE+"'>"+app.model.times.POSTOFFICE+"</td>";
+			html += "</tr>";
+		}	
+
+		html += "</table>";
+
+		html += getNextPrevButton('to-selectionscreen', 'to-personaldetails');
+		elt.html(html);
+		showScreen('agenda');
+	}
+
 	function getTableHeaderHTML(classs, num){
 		var x = classs == null ? "" : "class='numspots'";
 		return "<tr class='header-row'><th>Type ruimte</th>"+
@@ -49,12 +110,14 @@
 			   "    <th>Vloer</th></tr>";
 
 	}
+
 	function getValidationErrorHTML(){
 		var html =  "<tr class='room-error' style='display:none;'>";
 		html +=       "<td colspan='5' class='error'></td>";
 		html +=     "</tr>";
 		return html;
 	}
+	
 	function getNewFormHTML(rooms){
 		var html = "";
 		html+= "<tr>";

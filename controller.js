@@ -14,12 +14,16 @@
         switch(screenId){
             case 'roomSelectionScreen':
 				data.rooms = app.model.getRooms();
-				console.log(app.view);
                 app.view.renderRoomSelectionScreen(data);
 			break;
 
-			case 'second':
-
+			case 'agendaScreen':
+				var data = app.model.getAgenda();
+				app.view.renderAgendaScreen(data);	
+			break;
+			case 'personalDetailsScreen':
+				var data = app.model.getPersonalDetails();
+				app.view.renderPersonalDetailsScreen(data);	
 			break;
        }
     };
@@ -51,6 +55,30 @@
 				$('.numspots').html('');
 			}
 		});
+		var toScreen = function(id){
+			event.preventDefault();
+			app.model.setScreenId(id);
+			app.controller.render();
+		}
+		$('#calculator').on('click', '#to-agenda',function(event){ toScreen('agendaScreen')});
+		$('#calculator').on('click', '#to-selectionscreen',function(event){ toScreen('roomSelectionScreen')});
+		$('#calculator').on('click', '#to-personaldetails',function(event){ toScreen('personalDetailsScreen')});
+
+		$('#calculator').on('click','.datetime',function(event){
+			event.preventDefault();
+			//var day = $(event.getTarget());
+			var elt = $( event.target );
+			var day = elt.attr('data-day'); 
+			var time = elt.attr('data-time');
+			if(app.model.isDateTimeSelected(day,time)){
+				app.model.removeDayTimeFromAgenda(day,time);
+			} else {
+				app.model.clearDay(day);
+				app.model.addDayTimeToAgenda(day,time);
+			}
+			app.controller.render();
+		});
+
 		$('#calculator').on('click', '#add-room', function(event){
 			event.preventDefault();
 			$('.room-error').hide();
