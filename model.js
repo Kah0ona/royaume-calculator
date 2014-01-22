@@ -38,9 +38,14 @@
 	app.model.person.CITY = "Plaats";
 	app.model.person.EMAIL = "E-mail";
 	app.model.person.PHONE = "Telefoon";
-	app.model.person.FIRSTNAME = "Voornaam";
-	app.model.person.FIRSTNAME = "Voornaam";
+	app.model.person.GENDER = "Geslacht";
+	app.model.person.COMPANY = "Bedrijfsnaam";
+	app.model.person.KVK = "KvK-nummer";
 
+
+	app.model.person.genders = app.model.person.genders || {};
+	app.model.person.genders.MALE = "De heer";
+	app.model.person.genders.FEMALE = "mevrouw";
 
 	var rooms = {};
 	var agenda = {};
@@ -59,17 +64,37 @@
 			personalDetails = per;
 		} else {
 			personalDetails[app.model.person.FIRSTNAME] = null;
-			personalDetails[app.model.person.FIRSTNAME] = null;
-			personalDetails[app.model.person.FIRSTNAME] = null;
-			personalDetails[app.model.person.FIRSTNAME] = null;
-			personalDetails[app.model.person.FIRSTNAME] = null;
-			personalDetails[app.model.person.FIRSTNAME] = null;
-			personalDetails[app.model.person.FIRSTNAME] = null;
-			personalDetails[app.model.person.FIRSTNAME] = null;
-			personalDetails[app.model.person.FIRSTNAME] = null;
+			personalDetails[app.model.person.SURNAME] = null;
+			personalDetails[app.model.person.STREET] = null;
+			personalDetails[app.model.person.NUMBER] = null;
+			personalDetails[app.model.person.CITY] = null;
+			personalDetails[app.model.person.EMAIL] = null;
+			personalDetails[app.model.person.PHONE] = null;
+			personalDetails[app.model.person.GENDER] = app.model.person.genders.FEMALE;
+			personalDetails[app.model.person.COMPANY] = null;
+			personalDetails[app.model.person.KVK] = null;
+			persistInLocalStorage('person',personalDetails);
 		}
 
 	}
+
+	app.model.calculateTotalPrice = function(){
+		return 0;
+	}
+
+	app.model.getPersonalDetails = function(){
+		return personalDetails;
+	}
+
+	app.model.setPersonalDetail = function(key,val){
+		personalDetails[key] = val;
+		persistInLocalStorage('person',personalDetails);
+	}
+
+	app.model.getPersonalDetail = function(key){
+		return personalDetails[key];
+	}
+
 	function initAgenda(){
 		var ag = loadFromLocalStorage('agenda');
 		if(ag != null) {
@@ -113,7 +138,7 @@
 		persistInLocalStorage('agenda',agenda);
 	}
 
-	app.model.getPersonalDetails(){
+	app.model.getPersonalDetails = function(){
 		return personalDetails;
 	}
 

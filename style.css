@@ -13,10 +13,8 @@
 	padding: 5px;
 }
 
-/* TODO
-- trap moet geen aantal werkplekken en m2 tonen
-- toilet moet geen aantal werkplekken tonen
-- rest moet alles tonen
+.personal-label {
+	width: 150px;
+}
 
 
-*/

@@ -16,7 +16,10 @@
 				data.rooms = app.model.getRooms();
                 app.view.renderRoomSelectionScreen(data);
 			break;
-
+			case 'pricecalcScreen':
+				var data = app.model.calculateTotalPrice();
+				app.view.renderPricecalcScreen(data);
+			break;
 			case 'agendaScreen':
 				var data = app.model.getAgenda();
 				app.view.renderAgendaScreen(data);	
@@ -63,7 +66,13 @@
 		$('#calculator').on('click', '#to-agenda',function(event){ toScreen('agendaScreen')});
 		$('#calculator').on('click', '#to-selectionscreen',function(event){ toScreen('roomSelectionScreen')});
 		$('#calculator').on('click', '#to-personaldetails',function(event){ toScreen('personalDetailsScreen')});
-
+		$('#calculator').on('click', '#to-pricecalc',function(event){ toScreen('pricecalcScreen')});
+		$('#calculator').on('click', '#to-submit',function(event){ toScreen('submitScreen')});
+		$('#calculator').on('change', '.personal-input', function(event){
+			var elt = $(event.target);
+			var key = elt.attr('name');
+			app.model.setPersonalDetail(key,elt.val());
+		});
 		$('#calculator').on('click','.datetime',function(event){
 			event.preventDefault();
 			//var day = $(event.getTarget());

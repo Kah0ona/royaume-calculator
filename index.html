@@ -14,6 +14,7 @@
 			window.app.model.init();	
 			
 			window.app.controller.init();
+			window.app.model.setScreenId("pricecalcScreen");
 			window.app.controller.render();
 		});	
 	</script>
@@ -27,6 +28,7 @@
 	<div id="calculator">
 		<div id="roomselection_screen" class="appScreen" style="display:none;"></div>
 		<div id="agenda_screen" class="appScreen" style="display:none"></div>
+		<div id="pricecalc_screen" class="appScreen" style="display:none"></div>
 		<div id="personaldetails_screen" class="appScreen" style="display:none;"></div>
 	</div>
 </body>

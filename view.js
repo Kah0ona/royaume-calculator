@@ -26,7 +26,20 @@
         }
         previousScreen = screenId;
     }
+	app.view.renderPricecalcScreen = function(data){
+		var elt = $('#pricecalc_screen');
 
+		elt.empty();
+
+		var html ="";
+
+
+
+		html += getNextPrevButton('to-agenda', 'to-personaldetails');
+		elt.html(html);
+
+		showScreen('pricecalc');
+	}
 	app.view.renderRoomSelectionScreen = function(data){
 		var elt = $('#roomselection_screen');
 		elt.empty();
@@ -57,13 +70,54 @@
 	app.view.renderPersonalDetailsScreen = function(person){
 		var elt = $('#personaldetails_screen');
 		elt.empty();
+		var html="<form class='personaldetails'>";
+		html += getRadioRow(app.model.person.GENDER, app.model.person.genders);
+		html += getFormRow(app.model.person.FIRSTNAME);
+		html += getFormRow(app.model.person.SURNAME);
+		html += getFormRow(app.model.person.STREET);
+		html += getFormRow(app.model.person.NUMBER);
+		html += getFormRow(app.model.person.CITY);
+		html += getFormRow(app.model.person.EMAIL);
+		html += getFormRow(app.model.person.PHONE);
+//		html += getFormRow(app.model.person.);
+		html += getFormRow(app.model.person.COMPANY);
+		html += getFormRow(app.model.person.KVK);
 
-		var html="";
+		html += "</form>";
+
+		html += getNextPrevButton('to-pricecalc','to-submit');
 
 		elt.html(html);
+		populateForm(person);
 
 		showScreen('personaldetails');
 
+	}
+
+	function populateForm(person){
+		for(var field in person){
+			if(person[field] != null){
+				$('input.personal-input[type="text"][name="'+field+'"]').val(person[field]);
+				
+			}
+		}
+
+	}
+
+	function getFormRow(key){
+		var ret = "<label class='personal-label' for='"+key+"'>"+key+":</label>"+
+		          "<input class='personal-input' type='text' name='"+key+"'  /><br/>";
+		return ret;
+
+	}
+
+	function getRadioRow(field, vals){
+		var html = "";
+		for(var val in vals){
+			html += "<input type='radio' name='"+field+"' class='personal-input' value='"+vals[val]+"' > "+
+						vals[val]+'&nbsp;&nbsp;';
+		}
+		return html+'<br/>';
 	}
 
 	app.view.renderAgendaScreen = function(agenda){
@@ -79,25 +133,28 @@
 			if(app.model.isDateTimeSelected(day,app.model.times.PREOFFICE)){
 				selected = " selected";
 			}
-			html += "<td class='datetime "+selected+"' data-day='"+day+"' data-time='"+app.model.times.PREOFFICE+"'>"+app.model.times.PREOFFICE+"</td>";
+			html += "<td class='datetime "+selected+"' data-day='"+day+"' data-time='"+app.model.times.PREOFFICE+"'>"+
+						app.model.times.PREOFFICE+"</td>";
 		
 			selected = "";
 			if(app.model.isDateTimeSelected(day,app.model.times.OFFICE)){
 				selected = " selected";
 			}
-			html += "<td class='datetime "+selected+"' data-day='"+day+"' data-time='"+app.model.times.OFFICE+"'>"+app.model.times.OFFICE+"</td>";
+			html += "<td class='datetime "+selected+"' data-day='"+day+"' data-time='"+app.model.times.OFFICE+"'>"+
+						app.model.times.OFFICE+"</td>";
 
 			selected = "";
 			if(app.model.isDateTimeSelected(day,app.model.times.POSTOFFICE)){
 				selected = " selected";
 			}
-			html += "<td class='datetime "+selected+"' data-day='"+day+"' data-time='"+app.model.times.POSTOFFICE+"'>"+app.model.times.POSTOFFICE+"</td>";
+			html += "<td class='datetime "+selected+"' data-day='"+day+"' data-time='"+app.model.times.POSTOFFICE+"'>"+
+						app.model.times.POSTOFFICE+"</td>";
 			html += "</tr>";
 		}	
 
 		html += "</table>";
 
-		html += getNextPrevButton('to-selectionscreen', 'to-personaldetails');
+		html += getNextPrevButton('to-selectionscreen', 'to-pricecalc');
 		elt.html(html);
 		showScreen('agenda');
 	}
