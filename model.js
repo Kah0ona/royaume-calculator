@@ -20,12 +20,18 @@
 	var screenId = 'roomSelectionScreen';
 
     app.model.init = function(){
-		rooms[app.model.roomtypes.OFFICE]  = [];
-		rooms[app.model.roomtypes.MEETING] = [];
-		rooms[app.model.roomtypes.PANTRY]  = [];
-		rooms[app.model.roomtypes.TOILET]  = [];
-		rooms[app.model.roomtypes.HALLWAY] = [];
-		rooms[app.model.roomtypes.STAIRS]  = [];
+		var rms = loadFromLocalStorage();
+		if(rms != null){
+			rooms = rms;
+		} else {
+			rooms[app.model.roomtypes.OFFICE]  = [];
+			rooms[app.model.roomtypes.MEETING] = [];
+			rooms[app.model.roomtypes.PANTRY]  = [];
+			rooms[app.model.roomtypes.TOILET]  = [];
+			rooms[app.model.roomtypes.HALLWAY] = [];
+			rooms[app.model.roomtypes.STAIRS]  = [];
+			persistInLocalStorage();
+		}
 	}	
 
 	app.model.getScreenId = function(){
@@ -48,6 +54,7 @@
 			"floorType" : floorType,
 			"numSpots" : numSpots
 		});	
+		persistInLocalStorage();
 	};	
 
 	/**
@@ -59,12 +66,39 @@
 	
 	app.model.removeRoom = function(roomType, roomIndex){
 		rooms[roomType].splice(roomIndex, 1);
+		persistInLocalStorage();
 	}
 	/**
 	 * Returns the room by a specified index
 	 */
 	app.model.getRoomByIndex = function(roomType,num){
 		return rooms[roomType][num];
-	}	
+	}
+	function supportsLocalStorage() {  
+		if(localStorage){
+			return true;
+		} else {
+			return false
+		}
+	}  
+	function persistInLocalStorage(){
+		if(supportsLocalStorage()){
+			var str = JSON.stringify(rooms);
+			console.log("persisting: ",str);
+			localStorage.setItem("rooms", str);
+		}
+	}
+
+	function loadFromLocalStorage(){
+		if(supportsLocalStorage()){
+			var ret = localStorage.getItem("rooms");
+			console.log("loaded: ",ret);
+			if(ret == null){ return null; }
+
+			return JSON.parse(ret);
+		} else {
+			return null;
+		}
+	}
 
 }( (window.app = window.app || {}), jQuery ));

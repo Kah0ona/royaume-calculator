@@ -94,7 +94,7 @@
 				var str = '';
 				if(roomtype == app.model.roomtypes.STAIRS){
 					str = "Aantal"
-				} else if(roomtype == app.model.roomtypes.OFFICE){
+				} else if(roomtype == app.model.roomtypes.OFFICE || roomtype==app.model.roomtypes.MEETING){
 					str = "Aantal werkplekken";
 				} 
 				

@@ -34,17 +34,22 @@
 			var rid = $(this).attr('data-room-id');
 			var rtype = $(this).attr('data-room-type');
 			
-			app.model.removeroom(rtype,rid);
+			app.model.removeRoom(rtype,rid);
 			app.controller.render();
 		});
 		$('#calculator').on('change', 'select[name="roomtype"]', function(){
 			var roomtype = $('.calcform select[name="roomtype"]').val();
 			if(roomtype == app.model.roomtypes.STAIRS){
 				$('.numspots').html('Aantal');
-			} else {
+				$('.calcform input[name="numSpots"]').show();
+			} else if(roomtype == app.model.roomtypes.MEETING || 
+					  roomtype == app.model.roomtypes.OFFICE){
 				$('.numspots').html('Aantal werkplekken');
+				$('.calcform input[name="numSpots"]').show();
+			} else {
+				$('.calcform input[name="numSpots"]').hide();
+				$('.numspots').html('');
 			}
-
 		});
 		$('#calculator').on('click', '#add-room', function(event){
 			event.preventDefault();
@@ -63,7 +68,8 @@
 			
 			if(numSpots != parseInt(numSpots) && 
 			   roomType != app.model.roomtypes.TOILET && 
-			   roomType != app.model.roomtypes.STAIRS){
+			   roomType != app.model.roomtypes.STAIRS && 
+			   roomType != app.model.roomtypes.HALLWAY){
 				errors.push('Aantal werkplekken: vul een geheel getal in.');
 			}
 
