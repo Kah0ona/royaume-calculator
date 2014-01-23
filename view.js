@@ -26,19 +26,123 @@
         }
         previousScreen = screenId;
     }
+
+	app.view.renderSubmitScreen = function(data){
+		var elt = $('#submit_screen');
+		elt.empty();
+	    html += getOverviewHTML(data);
+		html += getSubmitButton();	
+		elt.html(html);
+
+		showScreen('submit');
+	}
+	app.view.getOverviewHTML = function(data){
+		var html = "";
+		html += getProductOverview(data.rooms);
+		html += "<hr />";
+		html += getAgendaOverview(data.agenda); 
+		html += "<hr />";
+		html += getPersonalDetailsOverview(data.personal);
+		html += "<hr />";
+		return html;
+	}
+	function getSubmitButton(){
+		var html = "";
+		html += "<input type='button' value='Versturen' id='submitdetails'/>";
+		return html;
+
+	}
+	function getPersonalDetailsOverview(person){
+		var html = "<h3>Persoonlijke gegevens</h3>";
+		html += "<table class='personaldetailsoverview'>";
+		for(var key in person){
+			var val = "";
+			if(person[key] != null){
+				val = person[key]
+			}
+			html += "<tr><td class='personkey'>"+key+"</td><td class='personvalue'>"+val+"</td></tr>";
+		}
+		html += "</table>";
+		return html;
+
+	}
+
+	function getAgendaOverview(agenda){
+		var html = "<h3>Gekozen dagen</h3>";
+		html += "<table class='agenda-overview'>";
+	    for(var day in agenda){
+			if(agenda[day].length > 0){
+				for(var i = 0; i < agenda[day].length; i++){
+					html += "<tr><td class='dateslot'>"+day+"</td><td class='datetimeslot'>"+agenda[day][i]+"</td></tr>";
+				}
+			}
+		}
+		html += "</table>";
+		return html;
+	}
+
+
+	function getProductOverview(rooms){
+		var html = "<h3>Gekozen ruimtes</h3>";
+
+		html += "<table class='productoverview table'>";
+		html += "<tr><th>Type</th><th>Oppervlak</th><th>Vloer</th><th>Aantal<br/>(werkplekken)</th></tr>";
+		for(var key in rooms){
+			for(var i = 0; rooms[key]!=null && i < rooms[key].length; i++){
+				var room = rooms[key][i];
+				console.log(room);
+				html += "<tr>";
+				html += "<td>"+key+" "+(i+1)+"</td>";
+				html += "<td style='text-align: right'>"+room.m2+" m<sup>2</sup></td>";
+				if(room.floorType!=null){
+					html += "<td style='text-align: right'>"+room.floorType+"</td>";
+				} else {
+					html += "<td>&nbsp;</td>";
+				}
+				if(room.numSpots != null){
+					html += "<td style='text-align: right'>"+room.numSpots+"</td>";
+				} else {
+					html += "<td>&nbsp;</td>";
+				}
+				html += "</tr>";
+			}
+		}
+
+		html += "</table>";
+		return html;	
+	}
+
 	app.view.renderPricecalcScreen = function(data){
 		var elt = $('#pricecalc_screen');
 
 		elt.empty();
 
 		var html ="";
-
+		html += "<div class='price-total-container'>Uw prijs: <div class='price-total'>"+
+			formatPrice(data.total)+"</div></div>";
 
 
 		html += getNextPrevButton('to-agenda', 'to-personaldetails');
 		elt.html(html);
 
 		showScreen('pricecalc');
+	}
+
+	function formatPrice(price){
+		Number.prototype.formatMoney = function(c, d, t){
+		var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : 
+				d, t = t == undefined ? "." : 
+				t, s = n < 0 ? "-" : 
+				"", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+				j = (j = i.length) > 3 ? j % 3 : 0;
+				
+		   return s + (j ? i.substr(0, j) + t : "") 
+					+ i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t)
+					+ (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+		};
+	
+		return price.formatMoney(2,',','.');
+
 	}
 	app.view.renderRoomSelectionScreen = function(data){
 		var elt = $('#roomselection_screen');

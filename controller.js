@@ -28,6 +28,14 @@
 				var data = app.model.getPersonalDetails();
 				app.view.renderPersonalDetailsScreen(data);	
 			break;
+			case 'submitScreen':
+				var data = {}
+				data.rooms = app.model.getRooms();
+				data.price = app.model.calculateTotalPrice();
+				data.agenda = app.model.getAgenda();
+				data.personal = app.model.getPersonalDetails();
+				app.view.renderSubmitScreen(data);
+			break;
        }
     };
 
@@ -43,6 +51,11 @@
 			
 			app.model.removeRoom(rtype,rid);
 			app.controller.render();
+		});
+		$('#calculator').on('click', '#submitdetails', function(event){
+			app.model.submitDetails(function(result){
+				console.log(result);
+			});
 		});
 		$('#calculator').on('change', 'select[name="roomtype"]', function(){
 			var roomtype = $('.calcform select[name="roomtype"]').val();

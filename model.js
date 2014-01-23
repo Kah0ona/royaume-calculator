@@ -29,7 +29,7 @@
 	
 	app.model.times.PREOFFICE = "Voor 09.00 uur";
 	app.model.times.OFFICE = "Tussen 09.00 en 17.00 uur";
-	app.model.times.POSTOFFICE = "Na 09.00 uur";
+	app.model.times.POSTOFFICE = "Na 17.00 uur";
 
 	app.model.person.FIRSTNAME = "Voornaam";
 	app.model.person.SURNAME = "Achternaam";
@@ -51,8 +51,10 @@
 	var agenda = {};
 	var personalDetails = {};
 	var screenId = 'roomSelectionScreen';
+	var submitUrl;
 
-    app.model.init = function(){
+    app.model.init = function(options){
+		submitUrl = options.submitUrl || '/wp-content/plugins/royaume/submit.php';
 		initRooms();
 		initAgenda();
 		initPersonalDetails();
@@ -63,6 +65,7 @@
 		if(per != null){
 			personalDetails = per;
 		} else {
+			personalDetails[app.model.person.GENDER] = app.model.person.genders.FEMALE;
 			personalDetails[app.model.person.FIRSTNAME] = null;
 			personalDetails[app.model.person.SURNAME] = null;
 			personalDetails[app.model.person.STREET] = null;
@@ -70,16 +73,31 @@
 			personalDetails[app.model.person.CITY] = null;
 			personalDetails[app.model.person.EMAIL] = null;
 			personalDetails[app.model.person.PHONE] = null;
-			personalDetails[app.model.person.GENDER] = app.model.person.genders.FEMALE;
 			personalDetails[app.model.person.COMPANY] = null;
 			personalDetails[app.model.person.KVK] = null;
 			persistInLocalStorage('person',personalDetails);
 		}
+	}
 
+	app.model.submitDetails = function(callback){
+		var data = {};
+		data.rooms = app.model.getRooms();
+		data.price = app.model.calculateTotalPrice();
+		data.agenda = app.model.getAgenda();
+		data.personal = app.model.getPersonalDetails();
+		var html = app.view.getOverviewHTML(data);
+
+		$.ajax({
+			type: "POST",
+			url: submitUrl,
+			data: html,
+			success: callback,
+			dataType: 'json' 
+		});
 	}
 
 	app.model.calculateTotalPrice = function(){
-		return 0;
+		return { "total" : 25.50 };
 	}
 
 	app.model.getPersonalDetails = function(){
