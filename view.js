@@ -30,7 +30,8 @@
 	app.view.renderSubmitScreen = function(data){
 		var elt = $('#submit_screen');
 		elt.empty();
-	    html += getOverviewHTML(data);
+		var html = "";
+	    html += app.view.getOverviewHTML(data);
 		html += getSubmitButton();	
 		elt.html(html);
 
