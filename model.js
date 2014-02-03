@@ -86,11 +86,16 @@
 		data.agenda = app.model.getAgenda();
 		data.personal = app.model.getPersonalDetails();
 		var html = app.view.getOverviewHTML(data);
-
+		var dt = {
+		   "html" : html,
+		   "personal" : data.personal,
+		   "agenda" : data.agenda,
+		   "price" : data.price
+		};
 		$.ajax({
 			type: "POST",
 			url: submitUrl,
-			data: html,
+			data: dt,
 			success: callback,
 			dataType: 'json' 
 		});

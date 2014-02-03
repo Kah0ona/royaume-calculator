@@ -33,6 +33,7 @@
 		var html = "";
 	    html += app.view.getOverviewHTML(data);
 		html += getSubmitButton();	
+		html += getNextPrevButton('to-personaldetails',null);
 		elt.html(html);
 
 		showScreen('submit');
@@ -74,7 +75,8 @@
 	    for(var day in agenda){
 			if(agenda[day].length > 0){
 				for(var i = 0; i < agenda[day].length; i++){
-					html += "<tr><td class='dateslot'>"+day+"</td><td class='datetimeslot'>"+agenda[day][i]+"</td></tr>";
+					html += "<tr><td class='dateslot'>"+day
+						 +"</td><td class='datetimeslot'>"+agenda[day][i]+"</td></tr>";
 				}
 			}
 		}
@@ -91,7 +93,7 @@
 		for(var key in rooms){
 			for(var i = 0; rooms[key]!=null && i < rooms[key].length; i++){
 				var room = rooms[key][i];
-				console.log(room);
+			//	console.log(room);
 				html += "<tr>";
 				html += "<td>"+key+" "+(i+1)+"</td>";
 				html += "<td style='text-align: right'>"+room.m2+" m<sup>2</sup></td>";

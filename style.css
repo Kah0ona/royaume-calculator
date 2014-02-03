@@ -2,7 +2,7 @@
 	border: 1px solid white;
 
 }
-.calcform, .productoverview { width: 50%; }
+/* .calcform, .productoverview { width: 50%; }*/
 .header-row { padding-top: 20px; }
 .group-row { height: 50px; } 
 .datetime.selected {
@@ -14,11 +14,13 @@
 }
 
 .personal-label {
-	width: 150px;
 }
 
 .datetimeslot {
 	text-align: right;
 }
 
+.calcform input {
+	width: auto; 
+}
 
