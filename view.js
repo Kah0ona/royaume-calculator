@@ -38,6 +38,17 @@
 
 		showScreen('submit');
 	}
+
+	app.view.renderThankYouScreen = function(data){
+		var elt = $('#thank_you_screen');
+		elt.empty();
+		var html = "";
+		html += "Bedankt voor uw aanvraag. U ontvangt een e-mail ter bevestiging, en we nemen zo spoedig mogelijk contact met u op.";
+		elt.html(html);
+
+		showScreen('thank_you');
+	}
+
 	app.view.getOverviewHTML = function(data){
 		var html = "";
 		html += getProductOverview(data.rooms);
@@ -304,7 +315,7 @@
 		html += "</option>";
 		html += "</select></td>";
 
-		html += "<td><a href='#' id='add-room'>+</a></td>";
+		html += "<td><a href='#' id='add-room'><i class='icon-plus'></i></a></td>";
 		html+="</tr>";	
 
 		return html;
@@ -341,7 +352,7 @@
 					html += "<td><a href='#' class='remove-room'"+
 								"data-room-id='"+i+"'"+
 								"data-room-type='"+roomtype+"'>"+
-								"&times;"+
+								"<i class='icon-minus'></i>"+
 								"</a>"+
 								"</td>";
 					html += "</tr>";

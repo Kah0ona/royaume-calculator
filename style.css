@@ -2,14 +2,11 @@
 	border: 1px solid white;
 
 }
-/* .calcform, .productoverview { width: 50%; }*/
-.header-row { padding-top: 20px; }
-.group-row { height: 50px; } 
 .datetime.selected {
 	background-color: #ccc;
 }
-.datetime {
-	border: 2px solid #ccc;
+
+.datetime { border: 2px solid #ccc;
 	padding: 5px;
 }
 
@@ -24,3 +21,6 @@
 	width: auto; 
 }
 
+.group-row {
+	color: red;
+}

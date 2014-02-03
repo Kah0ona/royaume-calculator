@@ -90,7 +90,8 @@
 		   "html" : html,
 		   "personal" : data.personal,
 		   "agenda" : data.agenda,
-		   "price" : data.price
+		   "price" : data.price,
+		   "action" : 'processcalc'
 		};
 		$.ajax({
 			type: "POST",

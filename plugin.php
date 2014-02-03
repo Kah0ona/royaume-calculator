@@ -39,8 +39,8 @@ class CalculatorPlugin {
 		add_action('wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
 
 		if(is_admin()){
-			add_action('wp_ajax_nopriv_apply',array($this,'process'));			
-			add_action('wp_ajax_apply',array($this,'process'));		
+			add_action('wp_ajax_nopriv_processcalc',array($this,'process'));			
+			add_action('wp_ajax_processcalc',array($this,'process'));		
 		}
 	}
 
@@ -53,7 +53,8 @@ class CalculatorPlugin {
 		
 		$mail = $this->buildMail($post);
 		mail($this->to, 'Ingezonden offerte-aanvraag', $mail, $headers);
-	    return "OK";
+		echo '{"status" : "OK"}';
+		die();
 	}	
 	public function buildMail($post){
 		$ret = ''.$post['html'];
@@ -89,6 +90,7 @@ class CalculatorPlugin {
 				<div id="pricecalc_screen" class="appScreen" style="display:none"></div>
 				<div id="personaldetails_screen" class="appScreen" style="display:none;"></div>
 				<div id="submit_screen" class="appScreen" style="display:none;"></div>
+				<div id="thank_you_screen" class="appScreen" style="display:none;"></div>
 			</div>
 		</div>
 	<?php

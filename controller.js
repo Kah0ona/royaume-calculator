@@ -36,6 +36,10 @@
 				data.personal = app.model.getPersonalDetails();
 				app.view.renderSubmitScreen(data);
 			break;
+			case 'thankYouScreen':
+				var data = {};
+				app.view.renderThankYouScreen(data);	
+			break;
        }
     };
 
@@ -54,7 +58,8 @@
 		});
 		$('#calculator').on('click', '#submitdetails', function(event){
 			app.model.submitDetails(function(result){
-				console.log(result);
+				app.model.setScreenId('thankYouScreen');
+				app.controller.render();
 			});
 		});
 		$('#calculator').on('change', 'select[name="roomtype"]', function(){
@@ -112,12 +117,13 @@
 			var errors = [];
 
 			if(m2 != parseInt(m2) && 
-			   roomType != app.model.roomtypes.STAIRS){
-				errors.push('Vierkante meter: vul een geheel getal in.');	
+			   roomType != app.model.roomtypes.STAIRS  ){
+			   errors.push('Vierkante meter: vul een geheel getal in.');	
 			}
 			
 			if(numSpots != parseInt(numSpots) && 
 			   roomType != app.model.roomtypes.TOILET && 
+			   roomType != app.model.roomtypes.PANTRY && 
 			   roomType != app.model.roomtypes.STAIRS && 
 			   roomType != app.model.roomtypes.HALLWAY){
 				errors.push('Aantal werkplekken: vul een geheel getal in.');
