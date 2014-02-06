@@ -64,9 +64,11 @@
 		});
 		$('#calculator').on('change', 'select[name="roomtype"]', function(){
 			var roomtype = $('.calcform select[name="roomtype"]').val();
+			$('.calcform input[name="m2"]').show();
 			if(roomtype == app.model.roomtypes.STAIRS){
 				$('.numspots').html('Aantal');
 				$('.calcform input[name="numSpots"]').show();
+				$('.calcform input[name="m2"]').hide()
 			} else if(roomtype == app.model.roomtypes.MEETING || 
 					  roomtype == app.model.roomtypes.OFFICE){
 				$('.numspots').html('Aantal werkplekken');
@@ -127,6 +129,23 @@
 			   roomType != app.model.roomtypes.STAIRS && 
 			   roomType != app.model.roomtypes.HALLWAY){
 				errors.push('Aantal werkplekken: vul een geheel getal in.');
+			}
+			
+
+			if(roomType == app.model.roomtypes.OFFICE && m2 > 60){
+				errors.push('m<sup>2</sup> vul een getal in tussen de 0 en 60');
+			}
+			if(roomType == app.model.roomtypes.MEETING && m2 > 30){
+				errors.push('m<sup>2</sup> vul een getal in tussen de 0 en 30');
+			}
+			if(roomType == app.model.roomtypes.PANTRY && m2 > 20){
+				errors.push('m<sup>2</sup> vul een getal in tussen de 0 en 20');
+			}
+			if(roomType == app.model.roomtypes.TOILET && m2 > 4){
+				errors.push('m<sup>2</sup> vul een getal in tussen de 0 en 4');
+			}
+			if(roomType == app.model.roomtypes.HALLWAY && m2 > 20){
+				errors.push('m<sup>2</sup> vul een getal in tussen de 0 en 20');
 			}
 
 			

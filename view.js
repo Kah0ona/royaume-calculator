@@ -338,8 +338,12 @@
 				html += getTableHeaderHTML(null, str);
 				for(var i = 0; i < rs.length; i++){
 					var room = rs[i];
-					html += "<tr><td>"+roomtype+" "+(i+1)+"</td>"+
-								"<td>"+room.m2+" m<sup>2</sup></td>";
+					html += "<tr><td>"+roomtype+" "+(i+1)+"</td>";
+					if(roomtype == app.model.roomtypes.STAIRS){
+						html += "<td>&nbsp;</td>";
+					} else {
+						html += "<td>"+room.m2+" m<sup>2</sup></td>";
+					}
 
 					if(room.numSpots != null){
 						html+= "<td>"+room.numSpots+"</td>";
