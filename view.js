@@ -133,8 +133,7 @@
 
 		var html ="";
 		html += "<div class='price-total-container'>Uw prijs: <div class='price-total'>"+
-			formatPrice(data.total)+"</div></div>";
-
+			formatPrice(data.total)+"</div> <span class='per-four-weeks'>Per 4 weken, exclusief BTW</span></div>";
 
 		html += getNextPrevButton('to-agenda', 'to-personaldetails');
 		elt.html(html);

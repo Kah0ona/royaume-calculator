@@ -54,7 +54,7 @@
 	var screenId = 'roomSelectionScreen';
 	var submitUrl;
 	var NUM_MINUTES_PER_WORKSPACE = 4;
-
+	var HOURLY_RATE = 20;
     app.model.init = function(options){
 		submitUrl = options.submitUrl || '/wp-content/plugins/royaume/submit.php';
 		initRooms();
@@ -109,12 +109,20 @@
 		for(var roomType in rooms){
 			totalMinutes += app.model.getNumMinutesByRoom(roomType, rooms[roomType]);	
 		}
-		//kantoor
-		//4 minuten per werkplek
-		//
-		return { "total" : 20 };
+		var daypartsPerWeek = app.model.getNumDaypartsPerWeek();
+		var weeksPerMonth = 4;
+		var totalPrice = (totalMinutes / 60) * HOURLY_RATE * weeksPerMonth * daypartsPerWeek;
+		totalPrice = Math.round(totalPrice);
+		return { "total" : totalPrice };
 	}
 
+	app.model.getNumDaypartsPerWeek = function(){
+		var ret = 0;
+		for(var dayKey in agenda){
+			ret += agenda[dayKey].length;
+		}
+		return ret;
+	}
 	/**
 	 * returns the number of minutes of workload for this room
 	 */
@@ -140,6 +148,7 @@
 				ret += getNumMinutesForStairs(rooms);
 			break;
 		}
+		return ret;
 	}
 
 
@@ -250,7 +259,7 @@
 			var hall = halls[i];
 			var m2 = parseInt(hall.m2);
 			var floorFactor = (hall.floorType == app.model.floortypes.HARD) ? 1.2 : 1;
-			var hallMins = m2 / 5;
+			var hallMins = 0;
 			if(m2 > 0 && m2 <= 5){
 				hallMins = 4;
 			}
@@ -273,23 +282,9 @@
 		var ret = 0;
 		for(var i = 0; i < stairs.length; i++){
 			var stair = stairs[i];
-			var m2 = parseInt(stair.m2);
 			var floorFactor = (stair.floorType == app.model.floortypes.HARD) ? 1.2 : 1;
-			var stairMins = m2 / 5;
-			if(m2 > 0 && m2 <= 5){
-				stairMins = 4;
-			}
-			else if(m2 > 5 && m2 <= 10){
-				stairMins = 6;
-			}
-			else if(m2 > 10 && m2 <= 15){
-				stairMins = 8;
-			}
-			else if(m2 > 15 && m2 <= 20){
-				stairMins = 10;
-			}
-			var total = stairMins * floorFactor;
-			ret += total;
+
+			ret += stair.numSpots * 5 * floorFactor;
 		}
 		return ret;
 	}
