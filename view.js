@@ -177,10 +177,10 @@
 	function getNextPrevButton(prevId, nextId){
 		var ret = "<div class='nextprev'>";
 		if(prevId != null){
-			ret +=   "<a id='"+prevId+"'>Vorige</a>";
+			ret +=   "<a class='prev' id='"+prevId+"'>Vorige</a>";
 		}
 		if(nextId != null){
-			ret +=   "<a id='"+nextId+"'>Volgende</a>";
+			ret +=   "<a class='next' id='"+nextId+"'>Volgende</a>";
 		}
 		ret +=    "</div>";
 		return ret;

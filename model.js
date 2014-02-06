@@ -47,11 +47,13 @@
 	app.model.person.genders.MALE = "De heer";
 	app.model.person.genders.FEMALE = "mevrouw";
 
+	
 	var rooms = {};
 	var agenda = {};
 	var personalDetails = {};
 	var screenId = 'roomSelectionScreen';
 	var submitUrl;
+	var NUM_MINUTES_PER_WORKSPACE = 4;
 
     app.model.init = function(options){
 		submitUrl = options.submitUrl || '/wp-content/plugins/royaume/submit.php';
@@ -103,7 +105,193 @@
 	}
 
 	app.model.calculateTotalPrice = function(){
-		return { "total" : 25.50 };
+		var totalMinutes = 0;
+		for(var roomType in rooms){
+			totalMinutes += app.model.getNumMinutesByRoom(roomType, rooms[roomType]);	
+		}
+		//kantoor
+		//4 minuten per werkplek
+		//
+		return { "total" : 20 };
+	}
+
+	/**
+	 * returns the number of minutes of workload for this room
+	 */
+	app.model.getNumMinutesByRoom = function(roomType, rooms) {
+		var ret = 0;
+		switch(roomType) {
+			case app.model.roomtypes.OFFICE: 
+				ret += getNumMinutesForOffices(rooms);
+			break;
+			case app.model.roomtypes.MEETING: 
+				ret += getNumMinutesForMeetingRooms(rooms);
+			break;
+			case app.model.roomtypes.PANTRY: 
+				ret += getNumMinutesForPantries(rooms);
+			break;
+			case app.model.roomtypes.TOILET: 
+				ret += getNumMinutesForToilets(rooms);
+			break;
+			case app.model.roomtypes.HALLWAY: 
+				ret += getNumMinutesForHallways(rooms);
+			break;
+			case app.model.roomtypes.STAIRS: 
+				ret += getNumMinutesForStairs(rooms);
+			break;
+		}
+	}
+
+
+
+	function getNumMinutesForOffices(offices){
+		var ret = 0;
+		for(var i = 0; i < offices.length; i++){
+			var office = offices[i];
+			var m2 = parseInt(office.m2);
+			var numSpots = parseInt(office.numSpots); // 4 minutes per workspace
+			var floorFactor = (office.floorType == app.model.floortypes.HARD) ? 1.2 : 1;
+			var officeMins = 0;
+			if(m2 > 0 && m2 <= 10){
+				officeMins = 6;
+			}
+			if(m2 > 10 && m2 <= 20){
+				officeMins = 11;
+			}
+			if(m2 > 20 && m2 <= 30){
+				officeMins = 16;
+			}
+			if(m2 > 30 && m2 <= 40){
+				officeMins = 19;
+			}
+			if(m2 > 40 && m2 <= 50){
+				officeMins = 21;
+			}
+			if(m2 > 50 && m2 <= 60){
+				officeMins = 22;
+			}
+
+			var total = (officeMins + (NUM_MINUTES_PER_WORKSPACE * numSpots)) * floorFactor;
+			ret += total;
+		}
+		return ret;
+	}
+
+	function getNumMinutesForMeetingRooms(meetingRooms){
+		var ret = 0;
+		for(var i = 0; i < meetingRooms.length; i++){
+			var meetingRoom = meetingRooms[i];
+			var m2 = parseInt(meetingRoom.m2);
+			var floorFactor = (meetingRoom.floorType == app.model.floortypes.HARD) ? 1.2 : 1;
+			var meetingRoomMins = 0;
+			if(m2 > 0 && m2 <= 10){
+				meetingRoomMins = 9;
+			}
+			else if(m2 > 10 && m2 <= 20){
+				meetingRoomMins = 15;
+			}
+			else if(m2 > 20 && m2 <= 30){
+				meetingRoomMins = 20;
+			}
+			var total = meetingRoomMins * floorFactor;
+			ret += total;
+		}
+		return ret;
+	}
+
+	function getNumMinutesForPantries(pantries){
+		var ret = 0;
+		for(var i = 0; i < pantries.length; i++){
+			var pantrie = pantries[i];
+			var m2 = parseInt(pantrie.m2);
+			var floorFactor = (pantrie.floorType == app.model.floortypes.HARD) ? 1.2 : 1;
+			var pantrieMins = m2 / 5;
+			if(m2 > 0 && m2 <= 3){
+				pantrieMins = 7;
+			}
+			else if(m2 > 3 && m2 <= 6){
+				pantrieMins = 15;
+			}
+			else if(m2 > 6 && m2 <= 9){
+				pantrieMins = 20;
+			}
+			else if(m2 > 9 && m2 <= 14){
+				pantrieMins = 25;
+			}
+			else if(m2 > 14 && m2 <= 20){
+				pantrieMins = 30;
+			}
+			var total = pantrieMins * floorFactor;
+			ret += total;
+		}
+		return ret;
+	}
+	function getNumMinutesForToilets(toilets){
+		var ret = 0;
+		for(var i = 0; i < toilets.length; i++){
+			var toilet = toilets[i];
+			var m2 = parseInt(toilet.m2);
+			var floorFactor = (toilet.floorType == app.model.floortypes.HARD) ? 1.2 : 1;
+			var toiletMins = m2 / 5;
+			if(m2 > 0 && m2 <= 2){
+				toiletMins = 4;
+			}
+			else if(m2 > 2 && m2 <= 4){
+				toiletMins = 5;
+			}
+			var total = toiletMins * floorFactor;
+			ret += total;
+		}
+		return ret;
+	}
+	function getNumMinutesForHallways(halls){
+		var ret = 0;
+		for(var i = 0; i < halls.length; i++){
+			var hall = halls[i];
+			var m2 = parseInt(hall.m2);
+			var floorFactor = (hall.floorType == app.model.floortypes.HARD) ? 1.2 : 1;
+			var hallMins = m2 / 5;
+			if(m2 > 0 && m2 <= 5){
+				hallMins = 4;
+			}
+			else if(m2 > 5 && m2 <= 10){
+				hallMins = 6;
+			}
+			else if(m2 > 10 && m2 <= 15){
+				hallMins = 8;
+			}
+			else if(m2 > 15 && m2 <= 20){
+				hallMins = 10;
+			}
+			var total = hallMins * floorFactor;
+			ret += total;
+		}
+		return ret;
+	}
+
+	function getNumMinutesForStairs(stairs){
+		var ret = 0;
+		for(var i = 0; i < stairs.length; i++){
+			var stair = stairs[i];
+			var m2 = parseInt(stair.m2);
+			var floorFactor = (stair.floorType == app.model.floortypes.HARD) ? 1.2 : 1;
+			var stairMins = m2 / 5;
+			if(m2 > 0 && m2 <= 5){
+				stairMins = 4;
+			}
+			else if(m2 > 5 && m2 <= 10){
+				stairMins = 6;
+			}
+			else if(m2 > 10 && m2 <= 15){
+				stairMins = 8;
+			}
+			else if(m2 > 15 && m2 <= 20){
+				stairMins = 10;
+			}
+			var total = stairMins * floorFactor;
+			ret += total;
+		}
+		return ret;
 	}
 
 	app.model.getPersonalDetails = function(){
