@@ -3,6 +3,10 @@
 (function( app, $, undefined ) {
     app.model = app.model || {};
 	
+	app.model.calculatormode = app.model.calculatormode || {};
+	app.model.calculatormode.PACKAGE = "package";
+	app.model.calculatormode.HOURLY = "hourly";
+	
 	app.model.roomtypes = app.model.roomtypes || {};
 	app.model.floortypes = app.model.floortypes || {};
 	app.model.days = app.model.days || {};
@@ -47,20 +51,30 @@
 	app.model.person.genders = app.model.person.genders || {};
 	app.model.person.genders.MALE = "De heer";
 	app.model.person.genders.FEMALE = "mevrouw";
-
 	
+	var calculatorMode;
 	var rooms = {};
 	var agenda = {};
 	var personalDetails = {};
+	var hourlyAgenda = {};
 	var screenId = 'roomSelectionScreen';
 	var submitUrl;
 	var NUM_MINUTES_PER_WORKSPACE = 4;
 	var HOURLY_RATE = 20;
+
     app.model.init = function(options){
 		submitUrl = options.submitUrl || '/wp-content/plugins/royaume/submit.php';
+		calculatorMode = options.calculatorMode || app.model.calculatormode.PACKAGE; 
+
+		if(calculatorMode == app.model.calculatormode.PACKAGE){
+			screenId = 'roomSelectionScreen';
+		} else {
+			screenId = 'hourlySelectionScreen';
+		}
 		initRooms();
 		initAgenda();
 		initPersonalDetails();
+		initHourlyAgenda();
 	}	
 	
 	function initPersonalDetails(){
@@ -83,6 +97,54 @@
 		}
 	}
 
+	function initHourlyAgenda(){
+		var per = loadFromLocalStorage('hourly_agenda');
+
+		if(per != null){
+			hourlyAgenda = per;
+		} else {
+			hourlyAgenda[app.model.days.MONDAY] =    { "amount" : 0, "time": null};
+			hourlyAgenda[app.model.days.TUESDAY] =   { "amount" : 0, "time": null};
+			hourlyAgenda[app.model.days.WEDNESDAY] = { "amount" : 0, "time": null};
+			hourlyAgenda[app.model.days.THURSDAY] =  { "amount" : 0, "time": null};
+			hourlyAgenda[app.model.days.FRIDAY] =    { "amount" : 0, "time": null};
+			persistInLocalStorage('hourly_agenda', hourlyAgenda);
+		}
+	}
+
+	app.model.calculateTotalHourlyPrice = function(){
+		var ret = 0;
+		for(var day in hourlyAgenda){
+			ret += hourlyAgenda[day].amount * HOURLY_RATE * 4;
+		}
+		return ret;
+	}
+	app.model.unsetHourlyAgendaDayTime = function(day){
+		hourlyAgenda[day].time = null;
+		persistInLocalStorage('hourly_agenda', hourlyAgenda);
+	}
+
+	app.model.setHourlyAgendaDayAmount = function(day, amount) {
+		hourlyAgenda[day].amount = amount;
+		persistInLocalStorage('hourly_agenda', hourlyAgenda);
+	}
+
+	app.model.setHourlyAgendaDayTime = function(day, time){
+		hourlyAgenda[day].time = time;
+		persistInLocalStorage('hourly_agenda', hourlyAgenda);
+	}
+
+	app.model.validatHourlyAgendaDay = function(day, time){
+		return (hourlyAgenda[day] != null && 
+			(hourlyAgenda[day].amount > 0 && hourlyAgenda[day].time != null) ||
+			(hourlyAgenda[day].amount <= 0 && hourlyAgenda[day].time == null))
+	}
+	app.model.getHourlyAgenda = function(){
+		return hourlyAgenda;
+	}
+	app.model.getCalculatorMode = function(){
+		return calculatorMode;
+	}
 	app.model.submitDetails = function(callback){
 		var data = {};
 		data.rooms = app.model.getRooms();
@@ -252,7 +314,7 @@
 			var toilet = toilets[i];
 			var m2 = parseInt(toilet.m2);
 			var floorFactor = (toilet.floorType == app.model.floortypes.HARD) ? 1.2 : 1;
-			var toiletMins = m2 / 5;
+			var toiletMins = 0;
 			if(m2 > 0 && m2 <= 2){
 				toiletMins = 4;
 			}
@@ -340,15 +402,20 @@
 	}
 
 	app.model.isDateTimeSelected = function(day,time){
-		var d =	agenda[day];
-		var c = 0;
-		for(var i = 0; i < d.length; i++){
-			var t = d[i];
-			if(t == time){
-				return true;
+		if(app.model.getCalculatorMode() == app.model.calculatormode.PACKAGE){
+			var d =	agenda[day];
+			var c = 0;
+			for(var i = 0; i < d.length; i++){
+				var t = d[i];
+				if(t == time){
+					return true;
+				}
 			}
+			return false;
+		} else {
+			var d = hourlyAgenda[day];
+			return d.time != null && d.time == time;
 		}
-		return false;
 	}
 
 	app.model.clearDay = function(day){

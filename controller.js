@@ -20,6 +20,14 @@
 				var total = app.model.calculateTotalPrice();
 				app.view.renderPricecalcScreen(total);
 			break;
+			case 'hourlyAgendaScreen':
+				var data = app.model.getHourlyAgenda();
+				app.view.renderHourlyAgendaScreen(data);	
+			break;
+			case 'hourlySelectionScreen':
+				var data = app.model.getHourlyAgenda();
+				app.view.renderHourlySelectionScreen(data);	
+			break;
 			case 'agendaScreen':
 				var data = app.model.getAgenda();
 				app.view.renderAgendaScreen(data);	
@@ -43,10 +51,49 @@
        }
     };
 
-	app.controller.init = function(){
-	    bindButtons();
+	function toScreen(event, id){
+		event.preventDefault();
+		app.model.setScreenId(id);
+		app.controller.render();
 	}
-	
+
+	app.controller.init = function(){
+		if(app.model.getCaclulatorMode == app.model.calculatormode.PACKAGE){
+			bindButtons();
+		} else {
+			bindButtonsHourly();
+		}
+	}
+	function bindButtonsHourly(){
+		$('#calculator').on('change', '.hourly-select', function(event){
+			event.preventDefault();
+			var day = $(this).attr('data-day');
+			var amount = parseInt($(this).val());
+			app.model.setHourlyAgendaDayAmount(day, amount);
+		});
+
+		$('#calculator').on('click', '#to-hourlyagenda',function(event){
+		   	toScreen(event, 'hourlyAgendaScreen');
+		});
+
+		$('#calculator').on('click', '#to-hourlyselectionscreen',function(event){
+		   	toScreen(event, 'hourlySelectionScreen');
+		});
+
+		$('#calculator').on('click','.datetime',function(event){
+			event.preventDefault();
+			var elt = $( event.target );
+			var day = elt.attr('data-day'); 
+			var time = elt.attr('data-time');
+			if(app.model.isDateTimeSelected(day,time)){
+				app.model.unsetHourlyAgendaDayTime(day);
+			} else {
+				app.model.setHourlyAgendaDayTime(day, time);
+			}
+			app.controller.render();
+		});
+
+	}	
 	function bindButtons(){
 		$('#calculator').on('click', '.remove-room',function(event){
 			event.preventDefault();
@@ -78,11 +125,7 @@
 				$('.numspots').html('');
 			}
 		});
-		var toScreen = function(event, id){
-			event.preventDefault();
-			app.model.setScreenId(id);
-			app.controller.render();
-		}
+
 		$('#calculator').on('click', '#to-agenda',function(event){ toScreen(event, 'agendaScreen')});
 		$('#calculator').on('click', '#to-selectionscreen',function(event){ toScreen(event, 'roomSelectionScreen')});
 		$('#calculator').on('click', '#to-personaldetails',function(event){ toScreen(event, 'personalDetailsScreen')});

@@ -12,11 +12,11 @@
 	<script>
 		jQuery(document).ready(function($){
 				window.app.model.init({
-					submitUrl : "submit.php"	
+					submitUrl : "submit.php",
+					calculatorMode : app.model.calculatormode.HOURLY
 				});	
 			
 			window.app.controller.init();
-			window.app.model.setScreenId("submitScreen");
 			window.app.controller.render();
 		});	
 	</script>
@@ -31,6 +31,7 @@
 		<div id="personaldetails_screen" class="appScreen" style="display:none;"></div>
 		<div id="submit_screen" class="appScreen" style="display:none;"></div>
 		<div id="thank_you_screen" class="appScreen" style="display:none;"></div>
+		<div id="hourly_selection_screen" class="appScreen" style="display:none;"></div>
 	</div>
 </body>
 </html>

@@ -29,6 +29,36 @@
         previousScreen = screenId;
     }
 
+	app.view.renderHourlySelectionScreen = function(data){
+		var elt = $('#hourly_selection_screen');
+		elt.empty();
+		var html = "";
+		html += "<table class='table hourly_selection'>";
+		for(var day in data){
+			html += "<tr>";
+			html += "<td>"+day+"</td>";
+			html += "<td>"+getDaySelectionElement(day, data[day])+"</td>";
+			html += "</tr>";
+		}
+		html += "</table>";
+		html += getNextPrevButton(null, 'to-hourlyagenda');
+		elt.html(html);
+		showScreen('hourly_selection');
+	}
+
+	function getDaySelectionElement(day, dayData){
+		var html = "<select data-day='"+day+"' class='hourly-select'> ";
+		for(var i = 0; i <= 6; i+=0.5){
+			if(i == 0.5) { i = 1; }
+			var sel = "";
+			if(dayData.amount == i){
+				sel = "selected";
+			}
+			html += "<option value='"+i+"' "+sel+">"+i+" uren</option>";
+		}
+		html += '</select>';
+		return html;
+	}	
 	app.view.renderSubmitScreen = function(data){
 		var elt = $('#submit_screen');
 		elt.empty();
@@ -170,7 +200,9 @@
 		elt.empty();
 		//manipulate DOM...
 
-		var html = "<table class='calcform table' >";
+		var html = "<h3>Specificeer uw kantoor</h3>";
+		html += "<p>Voeg hieronder ruimtes toe, en klik daarna op 'Volgende'. U kunt zoveel ruimtes toevoegen als u wilt.</p>";   
+		html += "<table class='calcform table' >";
 	    html += getTableSelectionHTML(data.rooms);
 		html += getTableHeaderHTML(true, "Aantal werkplekken");
 		html += getNewFormHTML(data.rooms);
@@ -205,7 +237,6 @@
 		html += getFormRow(app.model.person.CITY);
 		html += getFormRow(app.model.person.EMAIL);
 		html += getFormRow(app.model.person.PHONE);
-//		html += getFormRow(app.model.person.);
 		html += getFormRow(app.model.person.COMPANY);
 		html += getFormRow(app.model.person.KVK);
 
@@ -246,12 +277,8 @@
 		return html+'<br/>';
 	}
 
-	app.view.renderAgendaScreen = function(agenda){
-		var elt = $('#agenda_screen');
-		elt.empty();
-		var html = "";
-
-		html += "<table class='agenda' >";
+	function getAgendaHTML(agenda) {
+		var html = "<table class='agenda' >";
 	    for(var day in agenda){
 			html += "<tr>";
 			html += "<td>"+day+"</td>";
@@ -280,6 +307,27 @@
 
 		html += "</table>";
 
+		return html;
+	}
+
+	app.view.renderHourlyAgendaScreen = function(agenda){
+		var elt = $('#agenda_screen');
+		elt.empty();
+		var html = "";
+
+		html += getAgendaHTML(agenda);
+		html += getNextPrevButton('to-hourlyselectionscreen', 'to-pricecalc');
+
+		elt.html(html);
+		showScreen('agenda');
+	}
+
+	app.view.renderAgendaScreen = function(agenda){
+		var elt = $('#agenda_screen');
+		elt.empty();
+		var html = "";
+
+		html += getAgendaHTML(agenda);
 		html += getNextPrevButton('to-selectionscreen', 'to-pricecalc');
 		elt.html(html);
 		showScreen('agenda');
