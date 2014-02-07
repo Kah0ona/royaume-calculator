@@ -35,10 +35,11 @@
 	app.model.person.SURNAME = "Achternaam";
 	app.model.person.STREET = "Straat";
 	app.model.person.NUMBER = "Huisnummer";
+	app.model.person.ZIPCODE = "Postcode";
 	app.model.person.CITY = "Plaats";
 	app.model.person.EMAIL = "E-mail";
 	app.model.person.PHONE = "Telefoon";
-	app.model.person.GENDER = "Geslacht";
+	app.model.person.GENDER = "Aanhef";
 	app.model.person.COMPANY = "Bedrijfsnaam";
 	app.model.person.KVK = "KvK-nummer";
 
@@ -72,6 +73,7 @@
 			personalDetails[app.model.person.SURNAME] = null;
 			personalDetails[app.model.person.STREET] = null;
 			personalDetails[app.model.person.NUMBER] = null;
+			personalDetails[app.model.person.ZIPCODE] = null;
 			personalDetails[app.model.person.CITY] = null;
 			personalDetails[app.model.person.EMAIL] = null;
 			personalDetails[app.model.person.PHONE] = null;
@@ -104,6 +106,15 @@
 		});
 	}
 
+	app.model.validatePersonalDetails = function(){
+		for(var key in personalDetails){
+			if(personalDetails[key] == null || personalDetails[key] == ""){
+				return false;
+			}
+		}
+		return true;
+	}
+
 	app.model.calculateTotalPrice = function(){
 		var totalMinutes = 0;
 		for(var roomType in rooms){
@@ -113,7 +124,7 @@
 		var weeksPerMonth = 4;
 		var totalPrice = (totalMinutes / 60) * HOURLY_RATE * weeksPerMonth * daypartsPerWeek;
 		totalPrice = Math.round(totalPrice);
-		return { "total" : totalPrice };
+		return  totalPrice;
 	}
 
 	app.model.getNumDaypartsPerWeek = function(){

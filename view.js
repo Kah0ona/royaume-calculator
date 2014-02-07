@@ -11,18 +11,20 @@
      * @return {void}
      */
     function showScreen(screenId){
-        //console.log('showScreen: ' + screenId);
-        //console.log('previousScreen: '+previousScreen);
         if (previousScreen != screenId){ //only if screen id changed
             var divId = '#' + screenId + '_screen';
             //$('.appScreen').not(divId).hide();
-            $('.appScreen').not(divId).fadeOut(600, function(){
+            $('.appScreen').not(divId).hide();
+			$(divId).show();
+
+			/*	
+			fadeOut(600, function(){
                app.view.loaded = false;
                $(divId).fadeIn(600, function(){
                     app.view.loaded = true;
                }); 
             });
-         
+			*/
         }
         previousScreen = screenId;
     }
@@ -54,6 +56,8 @@
 		html += getProductOverview(data.rooms);
 		html += "<hr />";
 		html += getAgendaOverview(data.agenda); 
+		html += "<hr />";
+		html += getTotalPriceHTML(data.price);
 		html += "<hr />";
 		html += getPersonalDetailsOverview(data.personal);
 		html += "<hr />";
@@ -126,19 +130,23 @@
 		return html;	
 	}
 
-	app.view.renderPricecalcScreen = function(data){
+	app.view.renderPricecalcScreen = function(total){
 		var elt = $('#pricecalc_screen');
 
 		elt.empty();
 
 		var html ="";
-		html += "<div class='price-total-container'>Uw prijs: <div class='price-total'>"+
-			formatPrice(data.total)+"</div> <span class='per-four-weeks'>Per 4 weken, exclusief BTW</span></div>";
-
+		html += getTotalPriceHTML(total); 
 		html += getNextPrevButton('to-agenda', 'to-personaldetails');
 		elt.html(html);
 
 		showScreen('pricecalc');
+	}
+	function getTotalPriceHTML(total){
+		var html = "<h3>Uw prijs</h3>";
+		html += "<div class='price-total-container'><div class='price-total'>"+
+			formatPrice(total)+"</div><br/><span class='per-four-weeks'>Per 4 weken, exclusief BTW</span></div>";
+		return html;
 	}
 
 	function formatPrice(price){
@@ -193,6 +201,7 @@
 		html += getFormRow(app.model.person.SURNAME);
 		html += getFormRow(app.model.person.STREET);
 		html += getFormRow(app.model.person.NUMBER);
+		html += getFormRow(app.model.person.ZIPCODE);
 		html += getFormRow(app.model.person.CITY);
 		html += getFormRow(app.model.person.EMAIL);
 		html += getFormRow(app.model.person.PHONE);
@@ -201,7 +210,7 @@
 		html += getFormRow(app.model.person.KVK);
 
 		html += "</form>";
-
+		html += "<div class='alert personal-validation-error' style='display: none;'>Alle velden dienen te worden ingevuld.</div>";
 		html += getNextPrevButton('to-pricecalc','to-submit');
 
 		elt.html(html);

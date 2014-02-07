@@ -17,8 +17,8 @@
                 app.view.renderRoomSelectionScreen(data);
 			break;
 			case 'pricecalcScreen':
-				var data = app.model.calculateTotalPrice();
-				app.view.renderPricecalcScreen(data);
+				var total = app.model.calculateTotalPrice();
+				app.view.renderPricecalcScreen(total);
 			break;
 			case 'agendaScreen':
 				var data = app.model.getAgenda();
@@ -78,16 +78,23 @@
 				$('.numspots').html('');
 			}
 		});
-		var toScreen = function(id){
+		var toScreen = function(event, id){
 			event.preventDefault();
 			app.model.setScreenId(id);
 			app.controller.render();
 		}
-		$('#calculator').on('click', '#to-agenda',function(event){ toScreen('agendaScreen')});
-		$('#calculator').on('click', '#to-selectionscreen',function(event){ toScreen('roomSelectionScreen')});
-		$('#calculator').on('click', '#to-personaldetails',function(event){ toScreen('personalDetailsScreen')});
-		$('#calculator').on('click', '#to-pricecalc',function(event){ toScreen('pricecalcScreen')});
-		$('#calculator').on('click', '#to-submit',function(event){ toScreen('submitScreen')});
+		$('#calculator').on('click', '#to-agenda',function(event){ toScreen(event, 'agendaScreen')});
+		$('#calculator').on('click', '#to-selectionscreen',function(event){ toScreen(event, 'roomSelectionScreen')});
+		$('#calculator').on('click', '#to-personaldetails',function(event){ toScreen(event, 'personalDetailsScreen')});
+		$('#calculator').on('click', '#to-pricecalc',function(event){ toScreen(event, 'pricecalcScreen')});
+		$('#calculator').on('click', '#to-submit',function(event){ 
+			if(app.model.validatePersonalDetails()){
+				$('.personal-validation-error').hide();
+				toScreen(event, 'submitScreen')
+			} else {
+				$('.personal-validation-error').show();
+			}
+		});
 		$('#calculator').on('change', '.personal-input', function(event){
 			var elt = $(event.target);
 			var key = elt.attr('name');

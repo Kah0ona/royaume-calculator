@@ -46,13 +46,18 @@ class CalculatorPlugin {
 
 	public function process(){
 		$post = $_POST;
-		$headers = 'From: '.$post['personal']['E-mail']."\r\n" .
+
+
+		$headers = 'MIME-Version: 1.0' . "\r\n".
+				   'Content-type: text/html; charset=UTF-8' . "\r\n".
+				   'From: '.$post['personal']['E-mail']."\r\n" .
 				   'Reply-To: '.$this->to. "\r\n" .
 				   'Cc: '.$post['personal']['E-mail']."\r\n".
 				   'X-Mailer: PHP/' . phpversion();			
 		
 		$mail = $this->buildMail($post);
 		mail($this->to, 'Ingezonden offerte-aanvraag', $mail, $headers);
+		mail($post['personal']['E-mail'], 'Uw aanvraag bij Royaume Facility', $mail, $headers);
 		echo '{"status" : "OK"}';
 		die();
 	}	
