@@ -145,7 +145,7 @@
 	app.model.getCalculatorMode = function(){
 		return calculatorMode;
 	}
-	app.model.submitHourlyDetails(callback){
+	app.model.submitHourlyDetails = function(callback){
 		var data = {};
 		data.price = app.model.calculateTotalHourlyPrice();
 		data.agenda = app.model.getHourlyAgenda();
