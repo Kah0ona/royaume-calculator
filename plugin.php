@@ -103,6 +103,7 @@ class CalculatorPlugin {
 				<div id="personaldetails_screen" class="appScreen" style="display:none;"></div>
 				<div id="submit_screen" class="appScreen" style="display:none;"></div>
 				<div id="thank_you_screen" class="appScreen" style="display:none;"></div>
+				<div id="hourly_selection_screen" class="appScreen" style="display:none;"></div>
 			</div>
 		</div>
 	<?php
