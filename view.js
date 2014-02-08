@@ -59,6 +59,17 @@
 		html += '</select>';
 		return html;
 	}	
+	app.view.renderHourlySubmitScreen = function(data){
+		var elt = $('#submit_screen');
+		elt.empty();
+		var html = "";
+	    html += app.view.getHourlyOverviewHTML(data);
+		html += getSubmitButton();	
+		html += getNextPrevButton('to-personaldetails',null);
+		elt.html(html);
+
+		showScreen('submit');
+	}
 	app.view.renderSubmitScreen = function(data){
 		var elt = $('#submit_screen');
 		elt.empty();
@@ -81,6 +92,29 @@
 		showScreen('thank_you');
 	}
 
+	function getHoursOverview(agenda){
+		var html = "<table class='hourly-agenda-overview'>";
+		for(var day in agenda){
+			if(agenda[day].amount > 0){
+				html += "<tr><td>"+day+"</td>"+
+					"<td>"+agenda[day].amount+" uur</td>"+
+					"<td>"+agenda[day].time+"</td></tr>";
+			}
+		}
+		html += "</table>";
+		return html;
+	}
+
+	app.view.getHourlyOverviewHTML = function(data){
+		var html = "";
+		html += getHoursOverview(data.agenda);
+		html += "<hr />";
+		html += getTotalPriceHTML(data.price);
+		html += "<hr />";
+		html += getPersonalDetailsOverview(data.personal);
+		html += "<hr />";
+		return html;
+	}
 	app.view.getOverviewHTML = function(data){
 		var html = "";
 		html += getProductOverview(data.rooms);
@@ -129,7 +163,6 @@
 		return html;
 	}
 
-
 	function getProductOverview(rooms){
 		var html = "<h3>Gekozen ruimtes</h3>";
 
@@ -160,6 +193,18 @@
 		return html;	
 	}
 
+	app.view.renderHourlyPricecalcScreen = function(total){
+		var elt = $('#pricecalc_screen');
+
+		elt.empty();
+
+		var html ="";
+		html += getTotalPriceHTML(total); 
+		html += getNextPrevButton('to-hourlyagenda', 'to-personaldetails');
+		elt.html(html);
+
+		showScreen('pricecalc');
+	}
 	app.view.renderPricecalcScreen = function(total){
 		var elt = $('#pricecalc_screen');
 
@@ -316,7 +361,7 @@
 		var html = "";
 
 		html += getAgendaHTML(agenda);
-		html += getNextPrevButton('to-hourlyselectionscreen', 'to-pricecalc');
+		html += getNextPrevButton('to-hourlyselectionscreen', 'to-hourlypricecalc');
 
 		elt.html(html);
 		showScreen('agenda');

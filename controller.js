@@ -28,6 +28,10 @@
 				var data = app.model.getHourlyAgenda();
 				app.view.renderHourlySelectionScreen(data);	
 			break;
+			case 'hourlyPriceCalcScreen':
+				var data = app.model.calculateTotalHourlyPrice();
+				app.view.renderHourlyPricecalcScreen(data);	
+			break;
 			case 'agendaScreen':
 				var data = app.model.getAgenda();
 				app.view.renderAgendaScreen(data);	
@@ -43,6 +47,13 @@
 				data.agenda = app.model.getAgenda();
 				data.personal = app.model.getPersonalDetails();
 				app.view.renderSubmitScreen(data);
+			break;
+			case 'hourlySubmitScreen':
+				var data = {}
+				data.price = app.model.calculateTotalHourlyPrice();
+				data.agenda = app.model.getHourlyAgenda();
+				data.personal = app.model.getPersonalDetails();
+				app.view.renderHourlySubmitScreen(data);
 			break;
 			case 'thankYouScreen':
 				var data = {};
@@ -79,7 +90,16 @@
 		$('#calculator').on('click', '#to-hourlyselectionscreen',function(event){
 		   	toScreen(event, 'hourlySelectionScreen');
 		});
+		$('#calculator').on('click', '#to-hourlypricecalc',function(event){
+		   	toScreen(event, 'hourlyPriceCalcScreen');
+		});
+		$('#calculator').on('click', '#to-personaldetails',function(event){ 
+			toScreen(event, 'personalDetailsScreen');
+		});
 
+		$('#calculator').on('click', '#to-submit',function(event){ 
+			toScreen(event, 'hourlySubmitScreen');
+		});
 		$('#calculator').on('click','.datetime',function(event){
 			event.preventDefault();
 			var elt = $( event.target );
