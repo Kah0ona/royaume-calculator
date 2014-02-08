@@ -78,10 +78,10 @@ class CalculatorPlugin {
 		wp_enqueue_style( 'rc-styles', plugins_url( '/royaume-calculator/style.css' ));
 	}
 	public function render_calculator_package() {
-		render_calculator('PACKAGE');
+		$this->render_calculator('PACKAGE');
 	}
 	public function render_calculator_hourly(){
-		render_calculator('HOURLY');
+		$this->render_calculator('HOURLY');
 	}
 	public function render_calculator($type='PACKAGE'){ ?>
 		<script>
