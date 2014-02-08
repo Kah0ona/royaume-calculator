@@ -34,7 +34,8 @@ class CalculatorPlugin {
 	 */
 	function __construct() {
 		session_start();
-		add_shortcode('calculator', array($this, 'render_calculator'));
+		add_shortcode('calculator', array($this, 'render_calculator_package'));
+		add_shortcode('calculator_hourly', array($this, 'render_calculator_hourly'));
 		add_action('wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
 		add_action('wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
 
@@ -76,12 +77,18 @@ class CalculatorPlugin {
 	public function register_plugin_styles(){
 		wp_enqueue_style( 'rc-styles', plugins_url( '/royaume-calculator/style.css' ));
 	}
-
-	public function render_calculator(){ ?>
+	public function render_calculator_package() {
+		render_calculator('PACKAGE');
+	}
+	public function render_calculator_hourly(){
+		render_calculator('HOURLY');
+	}
+	public function render_calculator($type='PACKAGE'){ ?>
 		<script>
 			jQuery(document).ready(function($){
 				window.app.model.init({
-					submitUrl : "<?php echo admin_url('admin-ajax.php'); ?>"
+					submitUrl : "<?php echo admin_url('admin-ajax.php'); ?>",
+					calculatorMode : app.model.calculatormode.<?php echo $type; ?>
 				});	
 				
 				window.app.controller.init();
