@@ -287,8 +287,11 @@
 
 		html += "</form>";
 		html += "<div class='alert personal-validation-error' style='display: none;'>Alle velden dienen te worden ingevuld.</div>";
+		if(app.model.getCalculatorMode() == app.model.calculatormode.PACKAGE){
 		html += getNextPrevButton('to-pricecalc','to-submit');
-
+		} else {
+		html += getNextPrevButton('to-hourlypricecalc','to-submit');
+		}
 		elt.html(html);
 		populateForm(person);
 

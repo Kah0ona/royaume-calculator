@@ -96,10 +96,20 @@
 		$('#calculator').on('click', '#to-personaldetails',function(event){ 
 			toScreen(event, 'personalDetailsScreen');
 		});
-
 		$('#calculator').on('click', '#to-submit',function(event){ 
-			toScreen(event, 'hourlySubmitScreen');
+			if(app.model.validatePersonalDetails()){
+				$('.personal-validation-error').hide();
+				toScreen(event, 'hourlySubmitScreen')
+			} else {
+				$('.personal-validation-error').show();
+			}
 		});
+		$('#calculator').on('change', '.personal-input', function(event){
+			var elt = $(event.target);
+			var key = elt.attr('name');
+			app.model.setPersonalDetail(key,elt.val());
+		});
+
 		$('#calculator').on('click','.datetime',function(event){
 			event.preventDefault();
 			var elt = $( event.target );
