@@ -110,6 +110,12 @@
 			app.model.setPersonalDetail(key,elt.val());
 		});
 
+		$('#calculator').on('click', '#submitdetails', function(event){
+			app.model.submitHourlyDetails(function(result){
+				app.model.setScreenId('thankYouScreen');
+				app.controller.render();
+			});
+		});
 		$('#calculator').on('click','.datetime',function(event){
 			event.preventDefault();
 			var elt = $( event.target );

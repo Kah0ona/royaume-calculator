@@ -145,6 +145,29 @@
 	app.model.getCalculatorMode = function(){
 		return calculatorMode;
 	}
+	app.model.submitHourlyDetails(callback){
+		var data = {};
+		data.price = app.model.calculateTotalHourlyPrice();
+		data.agenda = app.model.getHourlyAgenda();
+		data.personal = app.model.getPersonalDetails();
+		var html = app.view.getHourlyOverviewHTML(data);
+
+		var dt = {
+		   "html" : html,
+		   "personal" : data.personal,
+		   "agenda" : data.agenda,
+		   "price" : data.price,
+		   "action" : 'processcalc'
+		};
+		$.ajax({
+			type: "POST",
+			url: submitUrl,
+			data: dt,
+			success: callback,
+			dataType: 'json' 
+		});
+
+	}
 	app.model.submitDetails = function(callback){
 		var data = {};
 		data.rooms = app.model.getRooms();
