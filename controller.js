@@ -69,7 +69,7 @@
 	}
 
 	app.controller.init = function(){
-		if(app.model.getCaclulatorMode == app.model.calculatormode.PACKAGE){
+		if(app.model.getCalculatorMode() == app.model.calculatormode.PACKAGE){
 			bindButtons();
 		} else {
 			bindButtonsHourly();
