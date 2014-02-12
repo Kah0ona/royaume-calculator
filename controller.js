@@ -238,7 +238,7 @@
 			if(errors.length>0) {
 				var errMsg = "";
 				for(var i = 0 ; i < errors.length; i++){
-					console.log(errors[i]);
+					//console.log(errors[i]);
 					errMsg += errors[i]+ "<br/>";
 				}
 				$('.room-error .error').html(errMsg);

@@ -60,7 +60,7 @@
 	var screenId = 'roomSelectionScreen';
 	var submitUrl;
 	var NUM_MINUTES_PER_WORKSPACE = 4;
-	var HOURLY_RATE = 20;
+	var HOURLY_RATE = 19.5;
 
     app.model.init = function(options){
 		submitUrl = options.submitUrl || '/wp-content/plugins/royaume/submit.php';
@@ -527,7 +527,7 @@
 	function persistInLocalStorage(key, val){
 		if(supportsLocalStorage()){
 			var str = JSON.stringify(val);
-			console.log("persisting: ",str);
+			//console.log("persisting: ",str);
 			localStorage.setItem(key, str);
 		}
 	}
@@ -535,7 +535,7 @@
 	function loadFromLocalStorage(key){
 		if(supportsLocalStorage()){
 			var ret = localStorage.getItem(key);
-			console.log("loaded: ",ret);
+			//console.log("loaded: ",ret);
 			if(ret == null){ return null; }
 
 			return JSON.parse(ret);
