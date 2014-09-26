@@ -1,0 +1,26 @@
+.appScreen {
+	border: 1px solid white;
+
+}
+.datetime.selected {
+	background-color: #ccc;
+}
+
+.datetime { border: 2px solid #ccc;
+	padding: 5px;
+}
+
+.personal-label {
+}
+
+.datetimeslot {
+	text-align: right;
+}
+
+.calcform input {
+	width: auto; 
+}
+
+.group-row {
+	color: red;
+}
